@@ -1,0 +1,13 @@
+{
+  "cronus:entry_list": "@",
+  "cronus:entry_get": "@",
+  "cronus:entry_create": "@",
+  "cronus:entry_delete": "@",
+  "cronus:entry_update": "@",
+
+  "cronus:ec2credentials_list": "@",
+  "cronus:ec2credential_get": "@",
+  "cronus:ec2credential_create": "@",
+  "cronus:ec2credential_delete": "@",
+  "cronus:ec2credential_update": "@"
+}

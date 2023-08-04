@@ -1,0 +1,25 @@
+{
+  DedicatedIpAutoWarmupEnabled: true,
+  Details: {
+    AdditionalContactEmailAddresses: <sensitive>,
+    ContactLanguage: "EN",
+    MailType: "TRANSACTIONAL",
+    ReviewDetails: {
+      CaseId: "8148802141",
+      Status: "GRANTED"
+    },
+    UseCaseDescription: <sensitive>,
+    WebsiteURL: <sensitive>
+  },
+  EnforcementStatus: "HEALTHY",
+  ProductionAccessEnabled: true,
+  SendQuota: {
+    Max24HourSend: 50000,
+    MaxSendRate: 14,
+    SentLast24Hours: 0
+  },
+  SendingEnabled: true,
+  SuppressionAttributes: {
+    SuppressedReasons: ["COMPLAINT"]
+  }
+}

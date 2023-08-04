@@ -1,0 +1,4 @@
+= content_for :main_toolbar do
+  Cronus Email Service
+
+= javascript_include_tag "cronus_app_widget", data: { token: @current_user_token, cronus_api: @cronus_endpoint }
