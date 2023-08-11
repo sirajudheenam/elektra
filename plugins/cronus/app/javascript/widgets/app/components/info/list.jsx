@@ -6,83 +6,29 @@
 // import { createAjaxHelper } from "lib/ajax_helper";
 // import { ajaxHelper } from "lib/ajax_helper";
 // import { useGlobalState } from "../StateProvider";
-
+// import Item from './item';
 import {
-  Button,
-  DataGrid,
-  DataGridRow,
-  DataGridCell,
-  DataGridHeadCell,
-  DataGridToolbar,
-  Spinner,
   DataList,
   DataListRow,
   DataListCell,
   ContentArea,
   ContentAreaHeading,
-} from "juno-ui-components";
-import React, { useEffect, useState } from "react";
+} from 'juno-ui-components';
+import React, { useEffect, useState } from 'react';
 
-// import data from "./awsAccount.json";
+import rawdata from '../../data/awsAccount.json';
 
-const rawdata = {
-  DedicatedIpAutoWarmupEnabled: true,
-  Details: {
-    AdditionalContactEmailAddresses: "VALUE",
-    ContactLanguage: "EN",
-    MailType: "TRANSACTIONAL",
-    ReviewDetails: {
-      CaseId: "8148802141",
-      Status: "GRANTED",
+function Info() {
+  const [accountData, setAccountData] = useState({});
+
+  useEffect(
+    function () {
+      setAccountData(JSON.parse(JSON.stringify(rawdata)));
     },
-    UseCaseDescription: "VALUE",
-    WebsiteURL: "VALUE",
-  },
-  EnforcementStatus: "HEALTHY",
-  ProductionAccessEnabled: true,
-  SendQuota: {
-    Max24HourSend: 50000,
-    MaxSendRate: 14,
-    SentLast24Hours: 0,
-  },
-  SendingEnabled: true,
-  SuppressionAttributes: {
-    SuppressedReasons: ["COMPLAINT"],
-  },
-};
+    [rawdata]
+  );
 
-// function parseData(data) {
-//   const jsonData = JSON.stringify(data);
-//   console.log(jsonData.constructor.name);
-//   const parsedJson = JSON.parse(jsonData);
-//   let arr = [];
-//   let toplevel, innerKeys;
-//   let tempObj = {};
-//   const keys = Object.keys(parsedJson);
-//   keys.forEach((key) => {
-//     toplevel = parsedJson[key];
-//     if (typeof toplevel !== "object") {
-//       let quotedKey = quote(key);
-//       tempObj = { [quotedKey]: parsedJson[key] };
-//       arr.push(tempObj);
-//     } else {
-//       innerKeys = Object.keys(toplevel);
-//       innerKeys.forEach((innerKey) => {
-//         let quotedKey = quote(innerKey);
-//         if (typeof innerKeys[innerKey] !== "object") {
-//           tempObj = { [quotedKey]: toplevel[innerKey] };
-//           arr.push(tempObj);
-//         }
-//       });
-//     }
-//   });
-//   return arr;
-// }
-
-const Info = () => {
-  // const items = parseData(rawdata);
-  // console.log(typeof items);
-  // console.log(items);
+  console.log(accountData);
   return (
     <>
       <ContentArea>
@@ -90,32 +36,41 @@ const Info = () => {
         <DataList>
           <DataListRow>
             <DataListCell cols={4}>DedicatedIpAutoWarmupEnabled</DataListCell>
-            <DataListCell cols={1}>true</DataListCell>
+            <DataListCell cols={4}>
+              {`${accountData.DedicatedIpAutoWarmupEnabled}`}
+            </DataListCell>
           </DataListRow>
           <DataListRow> Details</DataListRow>
           <DataListRow>
             <DataListCell cols={4}>
               AdditionalContactEmailAddresses
             </DataListCell>
-            <DataListCell cols={4}>info@example.com</DataListCell>
+            <DataListCell cols={4}>
+              {`${accountData.AdditionalContactEmailAddresses}`}
+            </DataListCell>
           </DataListRow>
           <DataListRow>
             <DataListCell cols={4}>ContactLanguage</DataListCell>
-            <DataListCell cols={4}>EN</DataListCell>
+            <DataListCell
+              cols={4}
+            >{`${accountData.ContactLanguage}`}</DataListCell>
           </DataListRow>
           <DataListRow>
             <DataListCell cols={4}>MailType</DataListCell>
-            <DataListCell cols={4}>TRANSACTIONAL</DataListCell>
+            <DataListCell cols={4}>{`${accountData.MailType}`}</DataListCell>
           </DataListRow>
           <DataListRow>ReviewDetails</DataListRow>
           <DataListRow>
-            ReviewDetails
             <DataListCell cols={4}>CaseId</DataListCell>
-            <DataListCell cols={4}>8148802141</DataListCell>
+            <DataListCell
+              cols={4}
+            >{`${accountData.ReviewDetails.CaseId}`}</DataListCell>
           </DataListRow>
           <DataListRow>
             <DataListCell cols={4}>Status</DataListCell>
-            <DataListCell cols={4}>GRANTED</DataListCell>
+            <DataListCell
+              cols={4}
+            >{`${accountData.ReviewDetails.Status}`}</DataListCell>
           </DataListRow>
           <DataListRow>
             <DataListCell cols={4}>UseCaseDescription</DataListCell>
@@ -159,6 +114,6 @@ const Info = () => {
       </ContentArea>
     </>
   );
-};
+}
 
 export default Info;

@@ -1,38 +1,40 @@
 /* eslint no-console:0 */
-import React from "react";
-import { HashRouter, Route, Redirect } from "react-router-dom";
+import React from 'react';
+import { HashRouter, Route, Redirect } from 'react-router-dom';
 
-import Tabs from "./Tabs";
-import Welcome from "./Welcome";
+import Tabs from './Tabs';
+import Welcome from './Welcome';
 
-import Catalog from "./catalog/show";
-import Entries from "./entries/list";
-import Info from "./info/list";
-import EC2Credentials from "./ec2credentials/list";
-import EditEntryModal from "./entries/edit";
-import ShowEntryModal from "./entries/show";
-import NewEntryModal from "./entries/new";
-import StateProvider from "./StateProvider";
+import Catalog from './catalog/show';
+import Entries from './entries/list';
+import Info from './info/list';
+import AccountInfo from './info/accountInfo';
+import EC2Credentials from './ec2credentials/list';
+import EditEntryModal from './entries/edit';
+import ShowEntryModal from './entries/show';
+import NewEntryModal from './entries/new';
+import StateProvider from './StateProvider';
 // import styles from "../styles.css";
 
-import StyleProvider, { AppShell } from "juno-ui-components";
-import { BrowserRouter } from "react-router-dom/cjs/react-router-dom.min";
-import { widgetBasePath } from "lib/widget";
+import StyleProvider, { AppShell } from 'juno-ui-components';
+import { BrowserRouter } from 'react-router-dom/cjs/react-router-dom.min';
+import { widgetBasePath } from 'lib/widget';
 
 const tabsConfig = [
-  { to: "/welcome", label: "Welcome", component: Welcome },
-  { to: "/info", label: "Info", component: Info },
+  { to: '/welcome', label: 'Welcome', component: Welcome },
+  { to: '/info', label: 'Info', component: Info },
+  { to: '/aws', label: 'AWS', component: AccountInfo },
   {
-    to: "/ec2credentials",
-    label: "EC2 Credentials",
+    to: '/ec2credentials',
+    label: 'EC2 Credentials',
     component: EC2Credentials,
   },
 
-  { to: "/entries", label: "Entries", component: Entries },
-  { to: "/catalog", label: "Services catalog", component: Catalog },
+  { to: '/entries', label: 'Entries', component: Entries },
+  { to: '/catalog', label: 'Services catalog', component: Catalog },
 ];
 
-const baseName = widgetBasePath("cronus");
+const baseName = widgetBasePath('cronus');
 
 // render all components inside a hash router
 const Application = () => {
