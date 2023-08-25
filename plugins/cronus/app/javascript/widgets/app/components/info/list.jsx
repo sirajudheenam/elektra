@@ -1,12 +1,4 @@
-// import { Link } from "react-router-dom";
-// import { policy } from "lib/policy";
-// import { SearchField } from "lib/components/search_field";
-// import CredentialItem from "./item";
-// import apiClient from "../../apiClient";
-// import { createAjaxHelper } from "lib/ajax_helper";
-// import { ajaxHelper } from "lib/ajax_helper";
-// import { useGlobalState } from "../StateProvider";
-// import Item from './item';
+
 import {
   DataList,
   DataListRow,
@@ -17,9 +9,106 @@ import {
 import React, { useEffect, useState } from 'react';
 
 import rawdata from '../../data/awsAccount.json';
+// import { randomUUID } from 'crypto';
+
+
+function AccountDetails({ details }) {
+  return (
+    details ? (
+      <>
+        <DataListRow>
+          <DataListCell cols={4}>
+            Additional Contact Email Addresses
+          </DataListCell>
+          <DataListCell cols={4}>
+            {`${details?.AdditionalContactEmailAddresses}`}
+          </DataListCell>
+        </DataListRow>
+        <DataListRow>
+          <DataListCell cols={4}>Contact Language</DataListCell>
+          <DataListCell
+            cols={4}
+          >{`${details?.ContactLanguage}`}</DataListCell>
+        </DataListRow>
+        <DataListRow>
+          <DataListCell cols={4}>Mail Type</DataListCell>
+          <DataListCell cols={4}>{`${details?.MailType}`}</DataListCell>
+        </DataListRow>
+        <DataListRow>
+          <DataListCell cols={4}>UseCase Description</DataListCell>
+          <DataListCell cols={4}>{details?.UseCaseDescription}</DataListCell>
+        </DataListRow>
+        <DataListRow>
+          <DataListCell cols={4}>Website URL</DataListCell>
+          <DataListCell cols={4}>{details?.WebsiteURL}</DataListCell>
+        </DataListRow>
+      </>
+    ) : (<p>Account details not found..</p>)
+  )
+}
+
+function ReviewDetails({ reviewDetails }) {
+
+  return (
+    <>
+      <DataListRow>
+        <DataListCell cols={4}>Case ID</DataListCell>
+        <DataListCell
+          cols={4}
+        >{`${reviewDetails?.CaseId}`}</DataListCell>
+      </DataListRow>
+      <DataListRow>
+        <DataListCell cols={4}>Status</DataListCell>
+        <DataListCell
+          cols={4}
+        >{`${reviewDetails?.Status}`}</DataListCell>
+      </DataListRow>
+    </>
+  )
+}
+
+function SendQuota({ quota }) {
+
+  return (
+    quota && (
+      <>
+        <DataListRow>
+          <DataListCell cols={4}>Max 24 Hour Send</DataListCell>
+          <DataListCell cols={4}>{quota.Max24HourSend}</DataListCell>
+        </DataListRow>
+        <DataListRow>
+          <DataListCell cols={4}>Max Send Rate</DataListCell>
+          <DataListCell cols={4}>{quota.MaxSendRate}</DataListCell>
+        </DataListRow>
+        <DataListRow>
+          <DataListCell cols={4}>Sent Last 24 Hours</DataListCell>
+          <DataListCell cols={4}>{quota.SentLast24Hours}</DataListCell>
+        </DataListRow>
+      </>
+    )
+  )
+}
+
+function SuppressedReasons({ accountData }) {
+  const attributes = accountData.SuppressionAttributes;
+  console.log(attributes)
+  return (
+    attributes?.SuppressedReasons &&
+    (
+      attributes?.SuppressedReasons.map(
+        (reason) => (<DataListCell cols={4} key={reason} > {`${reason}`}</DataListCell >)
+      )
+    )
+  )
+}
 
 function Info() {
+  // const [isLoading, setIsLoading] = useState(false);
   const [accountData, setAccountData] = useState({});
+  const [details, setDetails] = useState({});
+  const [sendQuota, setSendQuota] = useState({});
+
+  const reviewDetails = accountData?.Details?.ReviewDetails;
 
   useEffect(
     function () {
@@ -28,91 +117,52 @@ function Info() {
     [rawdata]
   );
 
+  useEffect(function () {
+    setDetails(JSON.parse(JSON.stringify(accountData)).Details);
+    setSendQuota(JSON.parse(JSON.stringify(accountData)).SendQuota);
+  }, [accountData]);
+
+  console.log("AccountData")
   console.log(accountData);
+
   return (
-    <>
+    accountData ? (
       <ContentArea>
         <ContentAreaHeading heading="Information" />
         <DataList>
           <DataListRow>
-            <DataListCell cols={4}>DedicatedIpAutoWarmupEnabled</DataListCell>
+            <DataListCell cols={4}>Dedicated IP Auto Warmup Enabled</DataListCell>
             <DataListCell cols={4}>
-              {`${accountData.DedicatedIpAutoWarmupEnabled}`}
+              {accountData?.DedicatedIpAutoWarmupEnabled ? "✅" : "❌"}
             </DataListCell>
           </DataListRow>
-          <DataListRow> Details</DataListRow>
+
+          <AccountDetails details={details} />
+          <SendQuota quota={sendQuota} />
+          <ReviewDetails reviewDetails={reviewDetails} />
           <DataListRow>
-            <DataListCell cols={4}>
-              AdditionalContactEmailAddresses
-            </DataListCell>
-            <DataListCell cols={4}>
-              {`${accountData.AdditionalContactEmailAddresses}`}
-            </DataListCell>
-          </DataListRow>
-          <DataListRow>
-            <DataListCell cols={4}>ContactLanguage</DataListCell>
-            <DataListCell
-              cols={4}
-            >{`${accountData.ContactLanguage}`}</DataListCell>
-          </DataListRow>
-          <DataListRow>
-            <DataListCell cols={4}>MailType</DataListCell>
-            <DataListCell cols={4}>{`${accountData.MailType}`}</DataListCell>
-          </DataListRow>
-          <DataListRow>ReviewDetails</DataListRow>
-          <DataListRow>
-            <DataListCell cols={4}>CaseId</DataListCell>
-            <DataListCell
-              cols={4}
-            >{`${accountData.ReviewDetails.CaseId}`}</DataListCell>
-          </DataListRow>
-          <DataListRow>
-            <DataListCell cols={4}>Status</DataListCell>
-            <DataListCell
-              cols={4}
-            >{`${accountData.ReviewDetails.Status}`}</DataListCell>
-          </DataListRow>
-          <DataListRow>
-            <DataListCell cols={4}>UseCaseDescription</DataListCell>
-            <DataListCell cols={4}>VALUE</DataListCell>
-          </DataListRow>
-          <DataListRow>
-            <DataListCell cols={4}>WebsiteURL</DataListCell>
-            <DataListCell cols={4}>VALUE</DataListCell>
-          </DataListRow>
-          <DataListRow>
-            <DataListCell cols={4}>EnforcementStatus</DataListCell>
-            <DataListCell cols={4}>HEALTHY</DataListCell>
-          </DataListRow>
-          <DataListRow>
-            <DataListCell cols={4}>ProductionAccessEnabled</DataListCell>
-            <DataListCell cols={4}>true</DataListCell>
-          </DataListRow>
-          <DataListRow>SendQuota</DataListRow>
-          <DataListRow>
-            <DataListCell cols={4}>Max24HourSend</DataListCell>
-            <DataListCell cols={4}>50000</DataListCell>
-          </DataListRow>
-          <DataListRow>
-            <DataListCell cols={4}>MaxSendRate</DataListCell>
-            <DataListCell cols={4}>14</DataListCell>
-          </DataListRow>
-          <DataListRow>
-            <DataListCell cols={4}>SentLast24Hours</DataListCell>
-            <DataListCell cols={4}>0</DataListCell>
+            <DataListCell cols={4}>Enforcement Status</DataListCell>
+            <DataListCell cols={4}>{accountData.EnforcementStatus}</DataListCell>
           </DataListRow>
           <DataListRow>
             <DataListCell cols={4}>SendingEnabled</DataListCell>
-            <DataListCell cols={4}>true</DataListCell>
+            {/* <DataListCell cols={4}>{`${accountData.SendingEnabled}`}</DataListCell> */}
+            <DataListCell cols={4}>{accountData.SendingEnabled ? "✅" : "❌"}</DataListCell>
           </DataListRow>
-          <DataListRow>SuppressionAttributes</DataListRow>
+          <DataListRow>
+            <DataListCell cols={4}>ProductionAccessEnabled </DataListCell>
+            <DataListCell cols={4}> {accountData.ProductionAccessEnabled ? "✅" : "❌"}</DataListCell>
+          </DataListRow>
           <DataListRow>
             <DataListCell cols={4}>SuppressedReasons</DataListCell>
-            <DataListCell cols={4}>COMPLAINT</DataListCell>
+            <SuppressedReasons accountData={accountData} />
           </DataListRow>
         </DataList>
       </ContentArea>
-    </>
+    ) : (
+      <p>Data is loading ..... </p>
+    )
+
   );
 }
 

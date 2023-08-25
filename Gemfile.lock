@@ -61,6 +61,11 @@ PATH
     compute (0.0.1)
 
 PATH
+  remote: plugins/cronus
+  specs:
+    cronus (0.0.1)
+
+PATH
   remote: plugins/dns_service
   specs:
     dns_service (0.0.1)
@@ -601,6 +606,7 @@ DEPENDENCIES
   colorize
   compute!
   config (~> 2.2.1)
+  cronus!
   database_cleaner
   dns_service!
   dotenv-rails
@@ -663,4 +669,4 @@ DEPENDENCIES
   webconsole!
 
 BUNDLED WITH
-   2.3.20
+   2.4.19

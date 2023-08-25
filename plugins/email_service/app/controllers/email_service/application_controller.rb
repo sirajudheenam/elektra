@@ -10,7 +10,7 @@ module EmailService
 
     def check_pre_conditions_for_cronus
       # Step 1: Role Check
-      unless ( current_user.has_role?('email_user') || current_user.has_role?('email_admin') || current_user.has_role?('cloud_email_admin')  || current_user.has_role?('admin'))
+      unless ( current_user.has_role?('email_user') || current_user.has_role?('email_admin') || current_user.has_role?('cloud_email_admin' )
         render 'email_service/shared/role_warning.html' and return
       end
       # Step 2: EC2 Credentials
