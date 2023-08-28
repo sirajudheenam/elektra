@@ -1,18 +1,35 @@
-import { createWidget } from "lib/widget";
+import {
+  createWidget
+} from "lib/widget";
 import App from "./components/Application";
 import * as reducers from "./reducers";
 
 const identityUrl = "https://identity-3.qa-de-1.cloud.sap/v3/";
-createWidget({ pluginName: "cronus", widgetName: "app" }).then((widget) => {
+
+// createConfig()
+
+createWidget({
+  pluginName: "cronus",
+  widgetName: "app"
+}).then((widget) => {
   console.log(widget);
   widget.configureAjaxHelper({
     // baseURL: widget.config.scriptParams.cronusApi,
     baseURL: identityUrl,
-    headers: { "X-Auth-Token": widget.config.scriptParams.token },
+    headers: {
+      "X-Auth-Token": widget.config.scriptParams.token
+    },
   });
 
-  console.log(`token : ${widget.config.scriptParams.token}`);
+  console.log(widget.config.scriptParams);
+  console.log(`TOKEN : ${widget.config.scriptParams.token}`);
   console.log(`endpoint : ${widget.config.scriptParams.cronus_endpoint}`);
+
+  @cronusEndpoint = email_service_url
+  @currentUserToken = current_user.token
+  @multicloudApiUser = ENV.fetch('MULTICLOUD_API_USER', nil)
+  @multicloudApiPassword = ENV.fetch('MULTICLOUD_API_PASSWORD', nil)
+
 
   delete widget.config.scriptParams.cronusApi;
   delete widget.config.scriptParams.token;
