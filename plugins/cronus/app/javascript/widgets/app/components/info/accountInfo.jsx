@@ -1,14 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { CodeBlock } from 'juno-ui-components';
 function AccountInfo() {
-
   const [accountInfo, setAccountInfo] = useState({});
   const url = 'https://cronus.qa-de-2.cloud.sap/v2/email/account/';
   let myHeaders = new Headers();
-  myHeaders.append(
-    'X-Auth-Token',
-    ''
-  );
+  myHeaders.append('X-Auth-Token', '');
   myHeaders.append('X-Amz-Date', '20230810T015117Z');
   myHeaders.append(
     'Authorization',

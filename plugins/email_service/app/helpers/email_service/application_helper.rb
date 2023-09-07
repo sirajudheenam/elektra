@@ -581,11 +581,8 @@ module EmailService
         verification_status =
           resp[:dkim_attributes][identity][:dkim_verification_status]
       end
-<<<<<<< HEAD
       return verification_status if verification_status
-=======
-      verification_status
->>>>>>> a691004ac30fa5ee07c50a7f8cfdd3d43c0108cb
+
     end
 
     #
@@ -1667,11 +1664,7 @@ module EmailService
         reasons: %w[BOUNCE COMPLAINT], # accepts BOUNCE, COMPLAINT
         start_date: Time.now,
         end_date: Time.now,
-<<<<<<< HEAD
-        next_token: 'NextToken',
-=======
         next_token: nil,
->>>>>>> a691004ac30fa5ee07c50a7f8cfdd3d43c0108cb
         page_size: 1
       }
       begin
@@ -2077,14 +2070,11 @@ module EmailService
     end
 
     def nebula_activate(multicloud_account = nil)
-<<<<<<< HEAD
       
       # TODO: FIX THIS
       # MultiCloud account create failed undefined method `code' for "Net::ReadTimeout 
       # with #<TCPSocket:(closed)>":String Did you mean? encode
       
-=======
->>>>>>> a691004ac30fa5ee07c50a7f8cfdd3d43c0108cb
       return 'MultiCloud parameters for activation are invalid' if multicloud_account.nil?
 
       provider = multicloud_account.provider || 'aws'
@@ -2101,11 +2091,6 @@ module EmailService
           }
         )
       response = _nebula_request(url, 'POST', headers, body)
-<<<<<<< HEAD
-          Rails.logger.debug "\n INSPECT : #{response.inspect} CODE: #{response.code}"
-=======
-
->>>>>>> a691004ac30fa5ee07c50a7f8cfdd3d43c0108cb
       audit_logger.info(
         '[cronus][nebula_activate]: ',
         current_user.id,
@@ -2144,8 +2129,6 @@ module EmailService
       @aws_account_details ||= ses_client_v2.get_account \
                                 if nebula_active? && ec2_creds && ses_client_v2
     end
-<<<<<<< HEAD
-=======
 
     def get_aws_signer(service, access, secret, region, url)
       return nil if !service || !access || !secret || !region || !url
@@ -2222,6 +2205,5 @@ module EmailService
       end
       @found || nil
     end
->>>>>>> a691004ac30fa5ee07c50a7f8cfdd3d43c0108cb
   end
 end

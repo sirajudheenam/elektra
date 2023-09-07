@@ -56,9 +56,6 @@ en:
       multicloud_account_delete: 'MultiCloud account delete failed'
       cronus_account_activation: 'Cronus is not activated'
       cronus_account_details_list: 'Nebula Account fetching failed'
-<<<<<<< HEAD
+      suppression_list_error: 'Suppression destination fetching failed'
       multicloud_account_delete_information: 'Deleting your email service account will cause a loss of data, do you still want to procceed?'
       multicloud_account_delete_conformation: 'Your request to terminate the Email Service was posted and the completion may take up to 48 hours!'
-=======
-      suppression_list_error: 'Suppression destination fetching failed'
->>>>>>> a691004ac30fa5ee07c50a7f8cfdd3d43c0108cb
