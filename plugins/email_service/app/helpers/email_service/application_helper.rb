@@ -581,7 +581,11 @@ module EmailService
         verification_status =
           resp[:dkim_attributes][identity][:dkim_verification_status]
       end
+<<<<<<< HEAD
       return verification_status if verification_status
+=======
+      verification_status
+>>>>>>> a691004ac30fa5ee07c50a7f8cfdd3d43c0108cb
     end
 
     #
@@ -1648,25 +1652,44 @@ module EmailService
     end
 
     def get_suppressed_destination(email_address)
-      options = { email_address: email_address }
-      ses_client_v2.get_suppressed_destination(options)
+      begin
+        options = { email_address: email_address }
+        @suppressed_destination ||= ses_client_v2.get_suppressed_destination(options)
+      rescue Aws::SES::Errors::ServiceError, StandardError => e
+        Rails.logger.error e.message
+        e.message
+      end
+      @suppressed_destination || e.message
     end
 
     def list_suppressed_destinations(_options = {})
       options = {
-        reasons: ['BOUNCE'], # accepts BOUNCE, COMPLAINT
+        reasons: %w[BOUNCE COMPLAINT], # accepts BOUNCE, COMPLAINT
         start_date: Time.now,
         end_date: Time.now,
+<<<<<<< HEAD
         next_token: 'NextToken',
+=======
+        next_token: nil,
+>>>>>>> a691004ac30fa5ee07c50a7f8cfdd3d43c0108cb
         page_size: 1
       }
-      ses_client_v2.list_suppressed_destinations(options)
+      begin
+        @suppressed_detinations = ses_client_v2.list_suppressed_destinations(options)
+      rescue Aws::SES::Errors::ServiceError, StandardError => e
+        Rails.logger.error e.message
+        e.message
+      end
+      @suppressed_detinations || e.message
     end
 
     def delete_suppressed_destination(email_address)
       ses_client_v2.delete_suppressed_destination(
         { email_address: email_address }
       )
+    rescue Aws::SES::Errors::ServiceError, StandardError => e
+      Rails.logger.error e.message
+      e.message
     end
 
     def get_blacklist_reports(blacklist = [])
@@ -2054,11 +2077,14 @@ module EmailService
     end
 
     def nebula_activate(multicloud_account = nil)
+<<<<<<< HEAD
       
       # TODO: FIX THIS
       # MultiCloud account create failed undefined method `code' for "Net::ReadTimeout 
       # with #<TCPSocket:(closed)>":String Did you mean? encode
       
+=======
+>>>>>>> a691004ac30fa5ee07c50a7f8cfdd3d43c0108cb
       return 'MultiCloud parameters for activation are invalid' if multicloud_account.nil?
 
       provider = multicloud_account.provider || 'aws'
@@ -2075,7 +2101,11 @@ module EmailService
           }
         )
       response = _nebula_request(url, 'POST', headers, body)
+<<<<<<< HEAD
           Rails.logger.debug "\n INSPECT : #{response.inspect} CODE: #{response.code}"
+=======
+
+>>>>>>> a691004ac30fa5ee07c50a7f8cfdd3d43c0108cb
       audit_logger.info(
         '[cronus][nebula_activate]: ',
         current_user.id,
@@ -2114,5 +2144,84 @@ module EmailService
       @aws_account_details ||= ses_client_v2.get_account \
                                 if nebula_active? && ec2_creds && ses_client_v2
     end
+<<<<<<< HEAD
+=======
+
+    def get_aws_signer(service, access, secret, region, url)
+      return nil if !service || !access || !secret || !region || !url
+
+      @signer ||= Aws::Sigv4::Signer.new(
+        service: service,
+        region: region,
+        endpoint: url,
+        access_key_id: access,
+        secret_access_key: secret
+      )
+    end
+
+    def _suppressed_email_list(next_token = nil)
+      return nil if !ec2_access || !ec2_secret
+
+      access =  ec2_access
+      secret =  ec2_secret
+
+      @suppressed_destination_array = []
+
+      @cronus_region = cronus_region || 'eu-de-2'
+      @aws_region = map_region(@cronus_region) || 'eu-central-1'
+
+      @cronus_endpoint = "https://cronus.#{@cronus_region}.cloud.sap"
+      signer = get_aws_signer('ses', access, secret, @aws_region, @cronus_endpoint)
+
+      return nil if signer == nil?
+
+      signature = signer.sign_request(
+        http_method: 'GET',
+        url: "#{@cronus_endpoint}/v2/email/suppression/addresses"
+      )
+      begin
+        if next_token
+          suppression_url = URI("#{@cronus_endpoint}/v2/email/suppression/addresses?NextToken=#{next_token}")
+        elsif next_token.nil?
+          suppression_url = URI("#{@cronus_endpoint}/v2/email/suppression/addresses")
+        end
+
+        https = Net::HTTP.new(suppression_url.host, suppression_url.port)
+        https.use_ssl = true
+        request = Net::HTTP::Get.new(suppression_url)
+        request['X-Amz-Date'] = signature.headers['x-amz-date']
+        request['Host'] = signature.headers['host']
+        request['X-Amz-security-token'] = signature.headers['x-amz-security-token']
+        request['X-Amz-content-sha256'] = signature.headers['x-amz-content-sha256']
+        request['Authorization'] = signature.headers['authorization']
+        response = https.request(request)
+        @parsed = JSON.parse(response.read_body)
+      rescue StandardError => e
+        Rails.logger.debug e.message
+      end
+
+      [@parsed['NextToken'], @parsed['SuppressedDestinationSummaries']] if @parsed
+    end
+
+    def suppression_destination_list
+      next_token, suppression_list = _suppressed_email_list
+      until next_token.nil?
+        next_token, suppression_list_set = _suppressed_email_list(next_token)
+        suppression_list += suppression_list_set if suppression_list_set
+      end
+      suppression_list || nil
+    end
+
+    def find_suppressed_destination(_email_address)
+      @suppressed_destinations = suppression_destination_list
+      @found = {}
+      unless @suppressed_destinations.nil?
+        @suppressed_destinations.each do |item|
+          @found = item if item['EmailAddress'] == email_address
+        end
+      end
+      @found || nil
+    end
+>>>>>>> a691004ac30fa5ee07c50a7f8cfdd3d43c0108cb
   end
 end
