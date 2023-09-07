@@ -7,5 +7,13 @@ Cronus::Engine.routes.draw do
     resources :entries, only: %i[index create update destroy]
   end
 
+  scope "api" do
+    resources :aws do
+      member do
+        get "account"
+      end
+    end
+  end
+
   get "/*path", to: "application#show", via: :all
 end
